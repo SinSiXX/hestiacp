@@ -33,27 +33,29 @@ json_list() {
         "HESTIA": "'$HESTIA_VERSION'",
         "RELEASE": "'$HESTIA_RELEASE'",
         "UPTIME": "'$UPTIME'",
-        "LOADAVERAGE": "'$LOADAVERAGE'"
+        "LOADAVERAGE": "'$LOADAVERAGE'",
+        "MEMAVAIL": "'$MEMAVAIL'",
+        "MEMTOTAL": "'$MEMTOTAL'"
         }'
     echo '}'
 }
 
 # SHELL list function
 shell_list() {
-    echo "HOSTNAME   OS   VER   ARCH  HESTIA  RELEASE  UPTIME   LA"
-    echo "--------   --   ---   ----  ------  -------  ------   --"
-    echo "$HOSTNAME $OS $VERSION $ARCH $HESTIA_VERSION $HESTIA_RELEASE $UPTIME $LOADAVERAGE"
+    echo "HOSTNAME   OS   VER   ARCH  HESTIA  RELEASE  UPTIME   LA   MEMAVAIL   MEMTOTAL"
+    echo "--------   --   ---   ----  ------  -------  ------   --   --------   --------"
+    echo "$HOSTNAME $OS $VERSION $ARCH $HESTIA_VERSION $HESTIA_RELEASE $UPTIME $LOADAVERAGE $MEMAVAIL $MEMTOTAL"
 }
 
 # PLAIN list function
 plain_list() {
-    echo -e "$HOSTNAME\t$OS\t$VERSION\t$ARCH\t$HESTIA_VERSION\t$HESTIA_RELEASE\t$UPTIME\t$LOADAVERAGE"
+    echo -e "$HOSTNAME\t$OS\t$VERSION\t$ARCH\t$HESTIA_VERSION\t$HESTIA_RELEASE\t$UPTIME\t$LOADAVERAGE\t$MEMAVAIL\t$MEMTOTAL"
 }
 
 # CSV list function
 csv_list() {
-    echo "HOSTNAME,OS,VERSION,ARCH,HESTIA,RELEASE,UPTIME,LOADAVERAGE"
-    echo "$HOSTNAME,$OS,$VERSION,$ARCH,$HESTIA_VERSION,$HESTIA_RELEASE,$UPTIME,$LOADAVERAGE"
+    echo "HOSTNAME,OS,VERSION,ARCH,HESTIA,RELEASE,UPTIME,LOADAVERAGE,MEMAVAIL,MEMTOTAL"
+    echo "$HOSTNAME,$OS,$VERSION,$ARCH,$HESTIA_VERSION,$HESTIA_RELEASE,$UPTIME,$LOADAVERAGE,$MEMAVAIL,$MEMTOTAL"
 }
 
 
@@ -98,6 +100,16 @@ UPTIME="$(echo $UPTIME / 60 |bc)"
 
 # Check LoadAverage
 LOADAVERAGE=$(cat /proc/loadavg |cut -f 1 -d ' ')
+
+# Check memory usage 
+MEMUSAGE=$(cat /proc/meminfo)
+if [ $format = "shell" ]; then
+    MEMTOTAL=$(echo $MEMUSAGE | cut -d' ' -f2 | awk '{ byte =$1 /1024; print byte "" }')
+    MEMAVAIL=$(echo $MEMUSAGE | cut -d' ' -f8 | awk '{ byte =$1 /1024; print byte "" }')
+else
+    MEMTOTAL=$(echo $MEMUSAGE | cut -d' ' -f2 | awk '{ byte =$1 /1024; print byte " MB" }')
+    MEMAVAIL=$(echo $MEMUSAGE | cut -d' ' -f8 | awk '{ byte =$1 /1024; print byte " MB" }')
+fi
 
 # Listing data
 case $format in

@@ -70,15 +70,21 @@
                   </div>
                 </td>
                 <td>
-                  <div class="l-unit__stat-cols clearfix">
-                    <div class="l-unit__stat-col l-unit__stat-col--left wide"><b><?=_('Load Average')?>:</b></div>
+                  <div class="l-unit__stat-cols clearfix last">
+                    <div class="l-unit__stat-col l-unit__stat-col--left"><b><?=_('Load Average')?>:</b></div>
                     <div class="l-unit__stat-col l-unit__stat-col--right"><?=$sys['sysinfo']['LOADAVERAGE']?></div>
                   </div>
                 </td>
                 <td>
                   <div class="l-unit__stat-cols clearfix last">
-                    <div class="l-unit__stat-col l-unit__stat-col--left wide"><b><?=_('Uptime')?>:</b></div>
+                    <div class="l-unit__stat-col l-unit__stat-col--left"><b><?=_('Uptime')?>:</b></div>
                     <div class="l-unit__stat-col l-unit__stat-col--right"><?=humanize_time($sys['sysinfo']['UPTIME'])?></div>
+                  </div>
+                </td>
+                <td>
+                  <div class="l-unit__stat-cols clearfix last">
+                    <div class="l-unit__stat-col l-unit__stat-col--left"><b><?=_('Memory Usage')?>:</b></div>
+                    <div class="l-unit__stat-col l-unit__stat-col--right"><?=$sys['sysinfo']['MEMAVAIL']?> / <?=$sys['sysinfo']['MEMTOTAL']?></div>
                   </div>
                 </td>
               </tr>
